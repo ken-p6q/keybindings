@@ -18,6 +18,10 @@ global USLayout:=0
 ; (外部スクリプト用)
 global PressedPrintableLetter:=0
 
+; IMEがONのときに印字可能文字が入力されたか？
+; (外部スクリプト用)
+global ImePrintableLetter:=0
+
 ; Maximal Gap Time は同時打鍵判定用の時定数です
 ; この時間(ms)内に次の入力があった場合は「同時」と見なします
 global MaximalGT:=70
@@ -426,6 +430,7 @@ onKeyDown(keyName)
 	PressedPrintableLetter:=1
 	if (IME_GET())
 	{
+		ImePrintableLetter:=1
 		if (ShinGeta == 1 && (IME_GetConvMode() & 7))
 		{
 			onOnKeyDown(keyName)

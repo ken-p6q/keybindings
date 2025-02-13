@@ -265,12 +265,7 @@ w::
   if (EditMode = 0)
     onKeyDown(ThisHotKey)
   else
-  {
-    if (ImeConverting)
-      Send("^k")
-    else
-      cmd_word_left()
-  }
+    cmd_word_left()
 }
 
 ; 単語単位の移動(Ctrl-Right)
@@ -279,12 +274,7 @@ e::
   if (EditMode = 0)
     onKeyDown(ThisHotKey)
   else
-  {
-    if (ImeConverting)
-      Send("^l")
-    else
-      cmd_word_right()
-  }
+    cmd_word_right()
 }
 
 ; Home
@@ -687,10 +677,10 @@ sc028::
 }
 
 ; 以前のクリップボードの内容を貼り付け
-~::
+sc00D::
 {
   if (EditMode = 0)
-    onKeyDown(ThisHotKey)
+    onKeyDown("^")
   else
     cmd_back_clipboard()
 }
@@ -711,7 +701,7 @@ Space::
   if (EditMode = 0)
   {
     PressedPrintableLetter := 1
-    Send("{Space}")
+    SendSpace()
   }
   else
     cmd_visual()
@@ -758,6 +748,22 @@ Enter::SendEnter()
 ^Delete::cmd_word_del()
 ^Home::cmd_file_head()
 ^End::cmd_file_tail()
+
+^w::
+{
+  if (ImeConverting)
+    Send("^k")
+  else
+    Send(ThisHotKey)
+}
+
+^e::
+{
+  if (ImeConverting)
+    Send("^l")
+  else
+    Send(ThisHotKey)
+}
 
 #UseHook false
 
