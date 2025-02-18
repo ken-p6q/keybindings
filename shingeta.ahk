@@ -9,7 +9,7 @@
 ;=============================
 
 ; 新下駄配列 0:無効 1:有効
-global ShinGeta:=0
+global ShinGeta:=1
 
 ; 英語キーボード 0:日本語 1:英語
 global USLayout:=0
@@ -17,6 +17,10 @@ global USLayout:=0
 ; 印字可能文字が入力されたか？
 ; (外部スクリプト用)
 global PressedPrintableLetter:=0
+
+; IMEがONのときに印字可能文字が入力されたか？
+; (外部スクリプト用)
+global ImePrintableLetter:=0
 
 ; Maximal Gap Time は同時打鍵判定用の時定数です
 ; この時間(ms)内に次の入力があった場合は「同時」と見なします
@@ -170,6 +174,8 @@ global kCmb:=Map(
 	"yu",
 	gKB["k"]|gKB["z"],	; づ
 	"du",
+	gKB["k"]|gKB["x"],	; ぞ
+	"zo",
 	gKB["k"]|gKB["c"],	; ぼ
 	"bo",
 	gKB["k"]|gKB["v"],	; む
@@ -186,6 +192,8 @@ global kCmb:=Map(
 	"mi",
 	gKB["d"]|gKB["p"],	; うぇ
 	"we",
+	gKB["d"]|gKB["@"],	; うぉ
+	"who",
 	gKB["d"]|gKB["h"],	; へ
 	"he",
 	gKB["d"]|gKB["j"],	; あ
@@ -202,6 +210,8 @@ global kCmb:=Map(
 	"pu",
 	gKB["d"]|gKB["/"],	; ヴ
 	"vu",
+	gKB["l"]|gKB["q"],	; ぢ
+	"di",
 	gKB["l"]|gKB["w"],	; め
 	"me",
 	gKB["l"]|gKB["e"],	; け
@@ -230,12 +240,16 @@ global kCmb:=Map(
 	"ro",
 	gKB["l"]|gKB["b"],	; ぬ
 	"nu",
+	gKB["s"]|gKB["y"],	; しぇ
+	"she",
 	gKB["s"]|gKB["u"],	; ぺ
 	"pe",
 	gKB["s"]|gKB["i"],	; ど
 	"do",
 	gKB["s"]|gKB["o"],	; や
 	"ya",
+	gKB["s"]|gKB["p"],	; じぇ
+	"je",
 	gKB["s"]|gKB["h"],	; び
 	"bi",
 	gKB["s"]|gKB["j"],	; ら
@@ -248,6 +262,8 @@ global kCmb:=Map(
 	"da",
 	gKB["s"]|gKB[","],	; ぴ
 	"pi",
+	gKB["s"]|gKB["."],	; ぽ
+	"po",
 	gKB["s"]|gKB["/"],	; ちぇ
 	"che",
 	gKB["i"]|gKB["r"],	; きゅ
@@ -262,6 +278,8 @@ global kCmb:=Map(
 	"cyo",
 	gKB["i"]|gKB["b"],	; ちゃ
 	"cya",
+	gKB["i"]|gKB["q"],	; ひゅ
+	"hyu",
 	gKB["i"]|gKB["a"],	; ひょ
 	"hyo",
 	gKB["i"]|gKB["z"],	; ひゃ
@@ -270,8 +288,6 @@ global kCmb:=Map(
 	"qe",
 	gKB["i"]|gKB["c"],	; しゃ
 	"sha",
-	gKB["i"]|gKB["q"],	; ひゅ
-	"hyu",
 	gKB["i"]|gKB["w"],	; しゅ
 	"shu",
 	gKB["i"]|gKB["e"],	; しょ
@@ -288,6 +304,8 @@ global kCmb:=Map(
 	"nyo",
 	gKB["o"]|gKB["b"],	; にゃ
 	"nya",
+	gKB["o"]|gKB["q"],	; りゅ
+	"ryu",
 	gKB["o"]|gKB["a"],	; りょ
 	"ryo",
 	gKB["o"]|gKB["z"],	; りゃ
@@ -296,8 +314,6 @@ global kCmb:=Map(
 	"gwe",
 	gKB["o"]|gKB["c"],	; じゃ
 	"ja",
-	gKB["o"]|gKB["q"],	; りゅ
-	"ryu",
 	gKB["o"]|gKB["w"],	; じゅ
 	"ju",
 	gKB["o"]|gKB["e"],	; じょ
@@ -312,16 +328,12 @@ global kCmb:=Map(
 	"／",
 	gKB["h"]|gKB["j"],	; （）
 	"+8+9{Enter}{Left}",
-	gKB["k"]|gKB["x"],	; ぞ
-	"zo",
-	gKB["l"]|gKB["q"],	; ぢ
-	"di",
-	gKB["s"]|gKB["y"],	; しぇ
-	"she",
-	gKB["s"]|gKB["."],	; ぽ
-	"po",
-	gKB["s"]|gKB["p"],	; じぇ
-	"je",
+	gKB["f"]|gKB["v"],	; ！
+	"+1",
+	gKB["f"]|gKB["b"],	; ！
+	"+1",
+	gKB["n"]|gKB["j"],	; ？
+	"?",
 	gKB["k"]|gKB["1"],	; ぁ
 	"xa",
 	gKB["k"]|gKB["2"],	; ぃ
@@ -378,12 +390,6 @@ global kCmb:=Map(
 	"`:",
 	gKB["s"]|gKB["-"],	; ＊
 	"+`:",
-	gKB["f"]|gKB["v"],	; ！
-	"+1",
-	gKB["f"]|gKB["b"],	; ！
-	"+1",
-	gKB["n"]|gKB["j"],	; ？
-	"?",
 )
 
 ; キー関連グローバル変数定義↑-------------------------------------
@@ -426,6 +432,7 @@ onKeyDown(keyName)
 	PressedPrintableLetter:=1
 	if (IME_GET())
 	{
+		ImePrintableLetter:=1
 		if (ShinGeta == 1 && (IME_GetConvMode() & 7))
 		{
 			onOnKeyDown(keyName)
