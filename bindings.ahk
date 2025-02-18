@@ -677,12 +677,18 @@ sc028::
 }
 
 ; 以前のクリップボードの内容を貼り付け
-sc00D::
+~::
 {
   if (EditMode = 0)
     onKeyDown("^")
   else
     cmd_back_clipboard()
+}
+
+; なぜか "~" が出ない。これを書くと出る。
++~::
+{
+  Send("~")
 }
 
 ; 置換(Ctrl-h)
