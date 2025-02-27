@@ -7,7 +7,7 @@
 mode_normal()
 
 ;;####################################################################
-;;タスク制御等　(起動したら通常モードでも有効。除外無し)
+;;タスク制御
 ;;####################################################################
 ;{{{
 
@@ -18,110 +18,6 @@ mode_normal()
 	!k::!Up
 	!l::!Right
 	!d::!Delete
-#HotIf
-
-;Win+Tabのデスクトップ切り替え
-#HotIf WinActive("ahk_class XamlExplorerHostIslandWindow ahk_exe Explorer.EXE", )
-  h::Left
-  j::Down
-  k::Up
-  l::Right
-  2::										;右のデスクトップへ(ジャンプリスト時は何もしない)
-  {
-      if WinActive("タスク ビュー")			;ahkファイルは、UTF-8のBOM付きにしておかないと、上手く判定されないので注意。
-      {
-        BlockInput("on")
-        Send("+{Tab}")
-        Send("{Right}")
-        Send("{Space}")
-        Send("{Tab}")
-        BlockInput("off")
-      }
-  }
-  1::										;左のデスクトップへ(ジャンプリスト時は何もしない)
-  {
-      if WinActive("タスク ビュー")
-      {
-        BlockInput("on")
-        Send("+{Tab}")
-        Send("{Left}")
-        Send("{Space}")
-        Send("{Tab}")
-        BlockInput("off")
-      }
-  }
-#HotIf
-
-;タスクバーで右クリックしたジャンプリスト（最近使ったもの）
-#HotIf WinActive("ahk_class Windows.UI.Core.CoreWindow ahk_exe ShellExperienceHost.exe", )
-  j::Down
-  k::Up
-  ESC::
-  q::
-    {
-        BlockInput("on")
-        Send("{Esc}")
-        Send("#{t}")
-        BlockInput("off")
-    }
-#HotIf
-
-;Win+T タスクバー
-#HotIf WinActive("ahk_class Shell_TrayWnd", )
-  h::Left
-  j::return				;なにもしない（Ctrl+Shift+Jで入ってくるので反応してしまう）
-  k::Up					;プレビュー
-  l::Right
-  w::
-    {
-        BlockInput("on")
-        Send("{Right}")		;右のアプリのプレビュー
-        Send("{Up}")
-        BlockInput("off")
-    }
-  e::
-    {
-        BlockInput("on")
-        Send("{Left}")	;左のアプリのプレビュー
-        Send("{Up}")
-        BlockInput("off")
-    }
-  :::
-  `;::
-    {
-        Send("{AppsKey}")	;ジャンプリスト表示
-    }
-#HotIf
-
-;Win+T タスクバーのプレビュー
-#HotIf WinActive("ahk_class TaskListThumbnailWnd", )
-  h::Left
-  l::Right	
-  j::Down					;タスクバーへ戻る
-  w::
-    {
-        BlockInput("on")
-        Send("{Down}")			;右のアプリのプレビュー
-        Send("{Right}")
-        Send("{Up}")
-        BlockInput("off")
-    }
-  e::						;左のアプリのプレビュー
-    {
-        BlockInput("on")
-        Send("{Down}")
-        Send("{Left}")
-        Send("{Up}")
-        BlockInput("off")
-    }
-  x::
-    {
-        BlockInput("on")
-        Send("{AppsKey}")
-        Sleep(200)			;右クリックメニューが出るまで時間がかかるのか、cが空振る事がある。
-        Send("c")
-        BlockInput("off")
-    }
 #HotIf
 
 ;}}}
@@ -772,6 +668,7 @@ Enter::SendEnter()
 ^Home::cmd_file_head()
 ^End::cmd_file_tail()
 
+; IME変換時: 文節を伸ばす
 ^w::
 {
   if (ImeConverting)
@@ -780,6 +677,7 @@ Enter::SendEnter()
     Send(ThisHotKey)
 }
 
+; IME変換時: 文節を短くする
 ^e::
 {
   if (ImeConverting)
