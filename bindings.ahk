@@ -179,13 +179,13 @@ SendSpace()
   cmd_insert()
 }
 
-; タスクバーにフォーカスを移す
-; ~ -> ^~
-^~::cmd_task_bar()
+; 以前のクリップボードの内容を貼り付け
+; sc00D -> ^~
+^sc00D::cmd_back_clipboard()
 
-; タスクビューを表示
+; 置換(Ctrl-h)
 ; sc07D -> \|
-^sc07D::cmd_task_view()
+^sc07D::cmd_replace()
 
 ; エンター
 ^`;::
@@ -198,11 +198,11 @@ SendSpace()
 ; sc028 -> :*
 ^sc028::cmd_bs()
 
-; 左のタブへ移動
-^[::cmd_left_tab()
+; PageUp
+^[::cmd_page_up()
 
-; 右のタブへ移動
-^]::cmd_right_tab()
+; PageDown
+^]::cmd_page_down()
 
 ; Alt-Ctrl-\ 新下駄配列 ON/OFF
 !^sc073::
@@ -232,6 +232,22 @@ NumLock::cmd_left_desktop()
 ; 右の仮想デスクトップへ移動
 ; Fn - l -> ScrollLock
 ScrollLock::cmd_right_desktop()
+
+; タスクバーにフォーカスを移す
+; Fn - ; -> Volume_Mute
+Volume_Mute::cmd_task_bar()
+
+; タスクビューを表示
+; Fn - p -> Pause
+Pause::cmd_task_view()
+
+; 左のタブへ移動
+; Fn - [ -> Volume_Down
+Volume_Down::cmd_left_tab()
+
+; 右のタブへ移動
+; Fn - ] -> Volume_Up
+Volume_Up::cmd_right_tab()
 
 ;}}}
 
@@ -677,10 +693,11 @@ sc028::
 }
 
 ; 以前のクリップボードの内容を貼り付け
-~::
+; sc00D -> ^~
+sc00D::
 {
   if (EditMode = 0)
-    onKeyDown("^")
+    onKeyDown("{^}")
   else
     cmd_back_clipboard()
 }
